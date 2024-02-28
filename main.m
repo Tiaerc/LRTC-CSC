@@ -4,28 +4,22 @@ close all;
 cur = cd;
 addpath(genpath(cur));
 
-original_image = imread('/home/ltc/CSC/Copy_of_PWLS-CSCGR-master/data/Peppers.jpg');
+original_image = imread('/home/CSC/data/Peppers.jpg');
 original_image = double(original_image);
 
 alpha = [3, 3, 1];
 alpha = alpha / sum(alpha);
 epsilon = 1e-6;
 
-% load(strcat('Test_Images/', imageName, '.mat'));
-% load('fruits256.mat');
+
 imageName = 'peppers';
 [rows, cols] = size(original_image);
 
-% load the system matrix
 img_size = rows;
 pro_views = 64;
 bins = 512;
 
 
-    
-
-% params of pwls
-% beta = 0.005;
 pwls_iter = 20;
 pwls = zeros(size(original_image));
 reconstruction = zeros(size(original_image));
@@ -101,13 +95,13 @@ for filter_lambda = 10
     tic
 
     for k = 1 : iter
-        Xlast = X_S;%Xlast记录两次更新之后的区别
+        Xlast = X_S;
         beta = beta * 1.05;
 
         % update Y 
-        [Y] = prox_TNN(X_S-W1/beta,1/beta);%可能又问题y值全部为0
+        [Y] = prox_TNN(X_S-W1/beta,1/beta);
 
-         % update X低秩部分
+      
     %      X_S = (W1 + beta*Y) / (ndims(original_image)*beta);
          X_S = (W1 + beta*Y) / beta;
          X_S(Omega) = original_image(Omega); 
