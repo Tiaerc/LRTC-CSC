@@ -3,6 +3,8 @@ The code for paper 'Tensor Completion via Convolutional Sparse Coding with Small
 
 The method of using the main.m file as TNN.
 
+### Citation
+
 ```
 @article{liao2023tensor,
   title={Tensor completion via convolutional sparse coding with small samples-based training},
