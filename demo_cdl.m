@@ -43,7 +43,7 @@ DLOpts.DRelaxParam = 1.8;
 toc
 
 % save filters
-path1 = strcat('/home/ltc/CSC/Copy_of_PWLS-CSCGR-master/Filter/fruit_filtersize_',num2str(filter_size),'_num_',num2str(filter_num),'_lambda_',num2str(lambda),'.mat');
+path1 = strcat('/home/ltc/CSC/Filter/fruit_filtersize_',num2str(filter_size),'_num_',num2str(filter_num),'_lambda_',num2str(lambda),'.mat');
 save(path1,'D');
 
 end
