@@ -1,7 +1,6 @@
 clear;
 clc;
 
-
 % load training data
 load('Data/train_data_fruit.mat');
 % load('MRI.mat');
