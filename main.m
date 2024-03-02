@@ -58,8 +58,7 @@ for filter_lambda = 10
      
     % create folder to save the results
     filename = strcat(num2str(pro_views),'_mr_',num2str(mr),'_lambda_',num2str(lambda),'_rho_',num2str(rho),'_mu_',num2str(tau));
-    path = strcat('/home/ltc/CSC/Copy_of_PWLS-CSCGR-master/Result/',filter,'/',imageName,'/',filename);
-%     path = strcat('?/',filter,'/',imageName,'/',filename);
+    path = strcat('/home/ltc/CSC/Result/',filter,'/',imageName,'/',filename);
     if ~exist(path,'dir')
         mkdir(path);
     end
@@ -77,8 +76,8 @@ for filter_lambda = 10
     X_S = original_image;
     Observed = original_image;
     Xlast = zeros(size(original_image));
-    Observed(logical(1-Omega)) = 0;%将观测数据Omega为0的地方换0
-    X_S(logical(1-Omega)) = mean(original_image(Omega));%将X_S数据Omega为0的地方换为均值
+    Observed(logical(1-Omega)) = 0;
+    X_S(logical(1-Omega)) = mean(original_image(Omega));
     
     errList = zeros(iter, 1);
     recon_mse= zeros(iter, 1);
@@ -91,7 +90,7 @@ for filter_lambda = 10
      max_beta = 10;
 
     optimal=zeros(dim);
-    W1 = zeros(size(original_image));%拉格朗日乘子
+    W1 = zeros(size(original_image));
     tic
 
     for k = 1 : iter
@@ -121,7 +120,7 @@ for filter_lambda = 10
         % Highpass filter test image
         npd = 16;
         fltlmbd = 10;  
-        [ll, lh] = lowpass(X_S, fltlmbd, npd);%ll低通，lh高通
+        [ll, lh] = lowpass(X_S, fltlmbd, npd);
 
         % Compute representation
         SCOpts = [];
@@ -131,13 +130,11 @@ for filter_lambda = 10
         SCOpts.AuxVarObj = 0;
         SCOpts.HighMemSolve = 1;
 
-       %[X, optinf2] = cbpdngr_gpu(D, lh, lambda, tau, SCOpts);%x=M 
         [X, optinf2] = cbpdn_gpu(D, lh, lambda, SCOpts); 
         DX = ifft2(sum(bsxfun(@times, fft2(D, size(X,1), size(X,2)), fft2(X)),3), ...
             'symmetric');
         DX = reshape(DX,size(original_image));
 
-         % update X 高通部分
         reconstruction = double(DX+ll);%dx=update gaotong
         reconstruction(reconstruction<0) = 0;
         reconstruction(Omega) = original_image(Omega);
@@ -184,10 +181,10 @@ for filter_lambda = 10
     fprintf('PSNR: SiLRTC = %f   HaLRTC-CSC=%f\n\n', psnr(uint8(original_image), uint8(XX)), psnr(uint8(original_image), uint8(reconstruction)));
 
     % inwirt picture
-    filename = ['/home/ltc/CSC/Copy_of_PWLS-CSCGR-master/CSCtt_result/img/',imageName,'_mr_',num2str(mr),'_lambda_',num2str(lambda),'_tau_',num2str(tau),'_filterlambda_',num2str(filter_lambda),'_',num2str(psnr(uint8(original_image),uint8(reconstruction))),'.png'];
+    filename = ['/home/ltc/CSC/CSCtt_result/img/',imageName,'_mr_',num2str(mr),'_lambda_',num2str(lambda),'_tau_',num2str(tau),'_filterlambda_',num2str(filter_lambda),'_',num2str(psnr(uint8(original_image),uint8(reconstruction))),'.png'];
     imwrite(uint8(reconstruction),filename);
     imshow(uint8(reconstruction));
     % imshow(uint8(reconstruction),'border','tight','initialmagnification','fit');
 
 end
-disp('End of PWLS-CSCGR');
+disp('End');
